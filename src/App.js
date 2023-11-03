@@ -16,10 +16,12 @@ import SingleImage from './SingleImage/SingleImage';
 import { useRef, useState } from 'react';
 
 function App() {
+  // --------------------------------------------Drag to reorder item--------------------------------------------
   // get all the images in an array
   const imgs = [img1, img2, img3, img4, img5, img6, img7, img8, img9, img10, img11]
-  const [images,setImages] = useState(imgs)
+  const [images, setImages] = useState(imgs)
 
+  // to capture drag item
   const dragItem = useRef(null)
   const dragOverItem = useRef(null)
 
@@ -28,7 +30,7 @@ function App() {
     const _images = [...images]
 
     // save the drag item content
-    const dragImage = _images.splice(dragItem.current,1)[0]
+    const dragImage = _images.splice(dragItem.current, 1)[0]
 
     // switch the draged item
     _images.splice(dragOverItem.current, 0, dragImage)
@@ -40,17 +42,34 @@ function App() {
     // update the actual array
     setImages(_images);
   }
+  // --------------------------------------------Drag to reorder item End--------------------------------------------
+
+  // -----------------------------------------------Select items start-----------------------------------------------
+  const [selectItems, setSelectItems] = useState({})
+  console.log(selectItems)
+  const itemsLength = Object.keys(selectItems).length
+  // -----------------------------------------------Select items end-----------------------------------------------
 
   return (
     <div className="App">
       {/* Header section */}
-      <header className="App-header p-5 flex justify-between">
-        <div>
-          <h1>Items selected</h1>
-        </div>
-        <div>
-          <button type='button' className='bg-teal-700 px-5 py-2 rounded-xl hover:bg-cyan-700'>Delete</button>
-        </div>
+      <header className="App-header flex justify-start items-center shadow-md">
+        {
+          itemsLength > 0 ?
+            <div className='w-full mx-10 flex justify-between font-bold'>
+              <div className='flex items-center'>
+                <input className='w-5 h-5 me-3' type="checkbox" name="" id="" checked/>
+                <h1>{itemsLength} {itemsLength > 1 ? "Files" : "File"} Selected</h1>
+              </div>
+              <button type='button' className='rounded-xl text-orange-700'>
+                Delete {itemsLength > 1 ? "files" : "file"}
+              </button>
+            </div>
+            :
+            <div className='mx-10'>
+              <h1 className='left-0 text-2xl font-bold'>Gallery</h1>
+            </div>
+        }
       </header>
 
       {/* gallery section */}
@@ -65,6 +84,8 @@ function App() {
                 dragItem={dragItem}
                 dragOverItem={dragOverItem}
                 handleSort={handleSort}
+                selectItems={selectItems}
+                setSelectItems={setSelectItems}
               ></SingleImage>
               :
               <div className='col-span-2 row-span-2'>
@@ -79,6 +100,8 @@ function App() {
               </div>
             )
           }
+
+          {/* input field in the last */}
           <div className='w-full h-full border-2 rounded-xl'>
             <input type="file" name="" id="" className='w-full h-full rounded-xl' />
           </div>

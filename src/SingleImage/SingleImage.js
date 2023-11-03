@@ -1,9 +1,23 @@
 import React, { useState } from 'react';
 
-const SingleImage = ({ image, index, handleSort, dragOverItem, dragItem }) => {
+const SingleImage = ({ image, index, dragItem, dragOverItem, handleSort, setSelectItems, selectItems }) => {
 
     const [hovered, setHovered] = useState(false);
 
+    const handleChange = (e, index) => {
+        const status = e.target.checked
+        if (status) {
+            setSelectItems({ ...selectItems, [index]: status })
+        }
+        else {
+            let _selectItems = { ...selectItems }
+            delete _selectItems[index]
+
+            if (selectItems[index]) {
+                setSelectItems({ ..._selectItems })
+            }
+        }
+    }
 
     return (
         <div
@@ -16,23 +30,16 @@ const SingleImage = ({ image, index, handleSort, dragOverItem, dragItem }) => {
             onDragEnd={handleSort}
             onDragOver={(e) => e.preventDefault()}
         >
-            <img src={image} alt="" className='rounded-xl' />
+            <img src={image} alt="" className='rounded-xl w-full h-full' />
             {hovered && (
-                <div
-                    style={{
-                        position: 'absolute',
-                        borderRadius: "0.75rem",
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '100%',
-                        background: 'rgba(0,0,0,0.5)',
-                        display: 'flex',
-                        justifyContent: 'left',
-                        alignItems: 'start',
-                    }}
-                >
-                    <input className='absolute top-5 left-5 w-5 h-5' type="checkbox" />
+                <div className='absolute rounded-xl top-0 left-0 w-full h-full flex justify-start align-top' style={{ background: 'rgba(0,0,0,0.5)' }}>
+                    <input
+                        id='check'
+                        className='absolute top-5 left-5 w-5 h-5'
+                        type="checkbox"
+                        // checked={selectItems[index] || false}
+                        onChange={(e) => handleChange(e, index)}
+                    />
                 </div>
             )}
         </div>
