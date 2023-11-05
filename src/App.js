@@ -18,7 +18,19 @@ import { useRef, useState } from 'react';
 function App() {
   // --------------------------------------------Drag to reorder item--------------------------------------------
   // get all the images in an array
-  const imgs = [img1, img2, img3, img4, img5, img6, img7, img8, img9, img10, img11]
+  const imgs = [
+    { id: 1, img: img1 },
+    { id: 2, img: img2 },
+    { id: 3, img: img3 },
+    { id: 4, img: img4 },
+    { id: 5, img: img5 },
+    { id: 6, img: img6 },
+    { id: 7, img: img7 },
+    { id: 8, img: img8 },
+    { id: 9, img: img9 },
+    { id: 10, img: img10 },
+    { id: 11, img: img11 }
+  ]
   const [images, setImages] = useState(imgs)
 
   // to capture drag item
@@ -58,7 +70,7 @@ function App() {
           itemsLength > 0 ?
             <div className='w-full mx-10 flex justify-between font-bold'>
               <div className='flex items-center'>
-                <input className='w-5 h-5 me-3' type="checkbox" name="" id="" checked/>
+                <input className='w-5 h-5 me-3' type="checkbox" name="" id="" checked />
                 <h1>{itemsLength} {itemsLength > 1 ? "Files" : "File"} Selected</h1>
               </div>
               <button type='button' className='rounded-xl text-orange-700'>
@@ -76,28 +88,18 @@ function App() {
       <section className='m-10'>
         <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4'>
           {
-            images.map((image, index) => index ?
+            images.map((image, index) =>
               <SingleImage
-                key={index}
-                image={image}
+                key={image.id}
+                image={image.img}
                 index={index}
+                id={image.id}
                 dragItem={dragItem}
                 dragOverItem={dragOverItem}
                 handleSort={handleSort}
                 selectItems={selectItems}
                 setSelectItems={setSelectItems}
               ></SingleImage>
-              :
-              <div className='col-span-2 row-span-2'>
-                <SingleImage
-                  key={index}
-                  image={image}
-                  index={index}
-                  dragItem={dragItem}
-                  dragOverItem={dragOverItem}
-                  handleSort={handleSort}
-                ></SingleImage>
-              </div>
             )
           }
 
