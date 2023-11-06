@@ -16,7 +16,6 @@ import SingleImage from './SingleImage/SingleImage';
 import { useRef, useState } from 'react';
 
 function App() {
-  // --------------------------------------------Drag to reorder item--------------------------------------------
   // get all the images in an array
   const imgs = [
     { id: 1, img: img1 },
@@ -33,6 +32,7 @@ function App() {
   ]
   const [images, setImages] = useState(imgs)
 
+  // --------------------------------------------Drag to reorder item--------------------------------------------
   // to capture drag item
   const dragItem = useRef(null)
   const dragOverItem = useRef(null)
@@ -58,9 +58,25 @@ function App() {
 
   // -----------------------------------------------Select items start-----------------------------------------------
   const [selectItems, setSelectItems] = useState({})
-  console.log(selectItems)
   const itemsLength = Object.keys(selectItems).length
   // -----------------------------------------------Select items end-----------------------------------------------
+
+  // -----------------------------------------------Delete Start-----------------------------------------------
+  const handleDelete = () => {
+    const selected = Object.keys(selectItems)
+    console.log(selected)
+    const newImages = [...images]
+    selected.forEach(id =>{
+      const idx = newImages.indexOf(newImages.find(im=>im.id==id))
+      if(idx !== -1){
+        newImages.splice(idx,1)
+      }
+    })
+    setImages(newImages);
+
+    setSelectItems({})
+  }
+  // -----------------------------------------------Delete End-----------------------------------------------
 
   return (
     <div className="App">
@@ -73,7 +89,7 @@ function App() {
                 <input className='w-5 h-5 me-3' type="checkbox" name="" id="" checked />
                 <h1>{itemsLength} {itemsLength > 1 ? "Files" : "File"} Selected</h1>
               </div>
-              <button type='button' className='rounded-xl text-orange-700'>
+              <button onClick={handleDelete} type='button' className='rounded-xl text-orange-700'>
                 Delete {itemsLength > 1 ? "files" : "file"}
               </button>
             </div>
@@ -104,9 +120,10 @@ function App() {
           }
 
           {/* input field in the last */}
-          <div className='w-full h-full border-2 rounded-xl'>
-            <input type="file" name="" id="" className='w-full h-full rounded-xl' />
-          </div>
+          <label htmlFor='#file' className='w-full h-full border-2 rounded-xl cursor-pointer flex items-center justify-center text-xl font-semibold'>
+            <input type="file" name="Add Image" id="file" className='hidden' />
+            + Add Image
+          </label>
         </div>
       </section>
     </div>
